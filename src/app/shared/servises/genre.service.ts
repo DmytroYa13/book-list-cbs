@@ -5,8 +5,6 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
 
-
-
 @Injectable({
   providedIn: 'root'
 })
@@ -15,7 +13,6 @@ export class GenreService {
   constructor(
     private http: HttpClient
   ) { }
-
 
   createGenre(genre: Genre): Observable<Genre> {
     return this.http.post(`${environment.fbUrl}/genres.json`, genre)
@@ -26,7 +23,6 @@ export class GenreService {
         }
       }))
   }
-
 
   getAllGenres(): Observable<Genre[]> {
     return this.http.get<Genre[]>(`${environment.fbUrl}/genres.json`)

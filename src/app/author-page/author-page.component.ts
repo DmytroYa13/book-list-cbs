@@ -1,17 +1,19 @@
 import { Author } from './../shared/interfaces';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AuthorService } from '../shared/servises/author.service';
 import { ActivatedRoute, Params } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-author-page',
   templateUrl: './author-page.component.html',
   styleUrls: ['./author-page.component.css']
 })
-export class AuthorPageComponent implements OnInit {
+export class AuthorPageComponent implements OnInit, OnDestroy {
 
   author: Author
+  aSub:Subscription
 
   constructor(
     private authorService: AuthorService,
@@ -27,10 +29,11 @@ export class AuthorPageComponent implements OnInit {
         }
       )
     ).subscribe(author => this.author = author)
-
-
-
-
   }
 
+  ngOnDestroy(){
+    if(this.aSub){
+      this.aSub.unsubscribe()
+    }
+  }
 }

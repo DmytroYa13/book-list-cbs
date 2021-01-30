@@ -1,6 +1,6 @@
 import { Book, SearchBook } from './../shared/interfaces';
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { from, fromEvent, Observable, of } from 'rxjs';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { from, fromEvent, Subscription } from 'rxjs';
 import { AuthorService } from '../shared/servises/author.service';
 import { Author } from '../shared/interfaces'
 import { debounceTime, distinctUntilChanged, filter, map, switchMap, tap } from 'rxjs/operators';
@@ -10,7 +10,7 @@ import { debounceTime, distinctUntilChanged, filter, map, switchMap, tap } from 
   templateUrl: './main-page.component.html',
   styleUrls: ['./main-page.component.css']
 })
-export class MainPageComponent implements OnInit, AfterViewInit {
+export class MainPageComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @ViewChild('searchInput') searchInputRef: ElementRef
 
@@ -19,6 +19,8 @@ export class MainPageComponent implements OnInit, AfterViewInit {
   booksForResult: SearchBook[] = []
   searchTitle: string
   isResult: boolean = true
+  aSub: Subscription
+  dSub: Subscription
 
 
   constructor(
@@ -26,15 +28,10 @@ export class MainPageComponent implements OnInit, AfterViewInit {
 
   ) { }
 
-
-
-
   ngOnInit(): void {
-    this.authorService.getAllAutors().subscribe(
+    this.aSub = this.authorService.getAllAutors().subscribe(
       authors => {
         this.authors = authors
-        console.log('Author: ', authors)
-        ////////////////
         this.authors.forEach((b) => {
 
           if (b.bookList) {
@@ -42,15 +39,20 @@ export class MainPageComponent implements OnInit, AfterViewInit {
               this.booksForSerch.push({ title: p.title, authorId: b.id })
             })
           }
-
         })
-        console.log('Books: ', this.booksForSerch)
-        ////////////////
       }
     )
   }
 
- 
+  ngOnDestroy(){
+    if(this.aSub){
+      this.aSub.unsubscribe()
+    }
+    if(this.dSub){
+      this.dSub.unsubscribe()
+    }
+  }
+
   closeListForResult(){
     setTimeout(() =>{
       this.booksForResult = []
@@ -59,7 +61,6 @@ export class MainPageComponent implements OnInit, AfterViewInit {
     },200)
     
   }
-
 
   ngAfterViewInit() {
     const search$ = fromEvent<any>(this.searchInputRef.nativeElement, 'input')
@@ -85,18 +86,12 @@ export class MainPageComponent implements OnInit, AfterViewInit {
 
           if (result) {
             this.isResult = true
-
             return true
           } else {
             return false
           }
         }
-
-
         )
-
-
-
       ).subscribe(
         result => {
         this.booksForResult.push(result)}
@@ -108,14 +103,10 @@ export class MainPageComponent implements OnInit, AfterViewInit {
   deleteAuthor(author: Author) {
 
     const desicion = window.confirm(`Delete ${author.lastName} ??`)
-
     if (!desicion) return
-
-    this.authorService.deleteAuthor(author.id).subscribe(
+    this.dSub = this.authorService.deleteAuthor(author.id).subscribe(
       () => this.authors = this.authors.filter(post => post.id !== author.id)
-
     )
-
   }
 
 }

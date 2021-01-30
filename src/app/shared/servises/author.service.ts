@@ -6,13 +6,10 @@ import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
 import { fbResponse } from '../interfaces'
 
-
 @Injectable({
   providedIn: 'root'
 })
 export class AuthorService {
-
-
 
   constructor(
     private http: HttpClient
@@ -32,10 +29,8 @@ export class AuthorService {
               id: key
             }))
         }
-
       }))
   }
-
 
   getAuthorById(id: string): Observable<Author> {
     return this.http.get<Author>(`${environment.fbUrl}/authors/${id}.json`)
@@ -45,7 +40,6 @@ export class AuthorService {
         }
       }))
   }
-
 
   createAuthor(author: Author): Observable<Author> {
     return this.http.post(`${environment.fbUrl}/authors.json`, author)

@@ -28,17 +28,10 @@
         </div>
     </div>
 
-
-
-
-
     <div class="form-group row ">
         <label class="col-sm-3 col-form-label" for="lastName">Last name<span class="reqiured-input">*</span></label>
         <div class="col-sm-9 min-height">
             <input type="text" class="form-control" id="lastName" formControlName="lastName"
-
-
-                
                 [ngClass]="{'is-invalid':form.get('lastName').invalid && form.get('lastName').touched,
             'is-valid': form.get('lastName').valid && form.get('lastName').touched}"
                 
@@ -74,7 +67,6 @@
 
     <button class="btn btn-block btn-primary" type="submit"
         [disabled]='form.disabled || form.invalid || isAddBookVisible'>{{isNew ? 'Create author': 'Save All changes'}}</button>
-
 </form>
 
 <hr>
@@ -140,23 +132,13 @@
         <small> Did not find suitable genre ?? Click <a routerLink='/genre'>here to ADD</a></small>
     </div>
 
-
-
 </div>
-
 
 <hr>
 
-
-<!-- <app-list *ngIf="booksList.length !==0; else isNew ? null : loader" [books]="booksList" [isNew]="isNew" [genres]="genres"></app-list> -->
 <app-list *ngIf='booksList.length!==0'  [books]="booksList" [isNew]="isNew" [genres]="genres"></app-list>
 
-
-<!-- <ng-template  #loader> -->
-    <app-loader *ngIf='!author && !isNew;else empty' ></app-loader>
-<!-- </ng-template> -->
-
-
+<app-loader *ngIf='!author && !isNew;else empty' ></app-loader>
 
 <ng-template #empty>
     <div *ngIf='booksList.length==0' class="alert alert-dark text-center m-3">

@@ -1,5 +1,5 @@
 import { Author, Book, Genre } from './../../shared/interfaces';
-import { AfterContentChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { CustomValidators } from '../../shared/custom.validators';
 
@@ -16,34 +16,25 @@ export class ListComponent implements OnInit, AfterViewInit {
   @ViewChild('bookCard') bookCard: TemplateRef<any>;
   @ViewChild('bookEdit') bookEdit: TemplateRef<any>;
 
-
   selectedForm: FormGroup
   post: Author
   selectedBook: Book = null
   postBooks: Book[] = []
-
-  // genres: string[] = ['123', 'sdfsdf', 'wef', 'qqq', 'vbvbvvbvb',]
-
   newBoobForm: FormGroup
 
   constructor(private cdr: ChangeDetectorRef)
    { }
 
   ngOnInit(): void {
-    
   }
 
   ngAfterViewInit() {
     this.cdr.detectChanges();
   }
 
-  
   getTemplate(book) {
     return this.selectedBook && this.selectedBook.id == book.id
-      ? this.bookEdit : this.bookCard
-
-      
-      
+      ? this.bookEdit : this.bookCard  
   }
 
 
@@ -51,7 +42,6 @@ export class ListComponent implements OnInit, AfterViewInit {
     this.selectedBook = Object.assign({}, book)
     this.selectedBookForm()
   }
-
 
   selectedBookForm() {
     this.selectedForm = new FormGroup({
@@ -63,22 +53,17 @@ export class ListComponent implements OnInit, AfterViewInit {
   deleteBook(book: Book) {
 
     const desicion = window.confirm(`Delete "${book.title}" ??`)
-
     if(!desicion) return
-
     let val = this.booksList
     let index: number = val.findIndex(x => x.id == book.id)
     val.splice(index, 1)
     this.reset()
-
   }
   reset() {
     this.selectedBook = null
-
   }
 
   save(){
-
     let val = this.booksList
     let index: number = val.findIndex(x => x.id == this.selectedBook.id)
     
@@ -88,12 +73,6 @@ export class ListComponent implements OnInit, AfterViewInit {
       pages: this.selectedForm.value.selectedPages,
     }
     Object.assign(val[index], bookAfterChange)
-    
     this.reset()
-    
-
   }
-
-
-
 }

@@ -1,9 +1,5 @@
 <h3>List</h3>
 
-
-
-
-
 <div class="card-body">
     <div *ngFor=" let book of booksList">
 
@@ -32,8 +28,6 @@
         </ng-template>
 
         <ng-template #bookEdit>
-
-
 
             <form [formGroup]='selectedForm' (ngSubmit)="save()"
                 class="form d-flex align-items-center  flex-wrap justify-content-between card-form">
@@ -66,9 +60,7 @@
                         [disabled]='selectedForm.invalid'>OK</button>
                     <button (click)="reset()" type="button" class="btn btn-secondary btn-custom ">Cancel</button>
                 </span>
-
             </form>
-
 
             <div *ngIf="selectedForm.get('selectedTitle').invalid && selectedForm.get('selectedTitle').touched">
                 <small class="red-text-invalid" *ngIf="selectedForm.get('selectedTitle').errors.required">Title must be
@@ -94,7 +86,6 @@
                     *ngIf="selectedForm.get('selectedPages').errors.pattern && !selectedForm.get('selectedPages').errors.required">
                     Use only number in Pages</small>
             </div>
-
         </ng-template>
     </div>
 </div>

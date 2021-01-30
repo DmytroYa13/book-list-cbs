@@ -1,8 +1,9 @@
 import { Genre } from './../shared/interfaces';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { CustomValidators } from '../shared/custom.validators'
 import { GenreService } from '../shared/servises/genre.service';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -10,10 +11,12 @@ import { GenreService } from '../shared/servises/genre.service';
   templateUrl: './genre-page.component.html',
   styleUrls: ['./genre-page.component.css']
 })
-export class GenrePageComponent implements OnInit {
+export class GenrePageComponent implements OnInit, OnDestroy {
 
   genreForm: FormGroup
   genresList: Genre[]
+  gSub:Subscription
+  dSub:Subscription
 
   constructor(
     private genreService: GenreService
@@ -24,24 +27,28 @@ export class GenrePageComponent implements OnInit {
       name: new FormControl('', [Validators.required, CustomValidators.noSpaces])
     })
 
-    this.genreService.getAllGenres().subscribe(
+    this.gSub = this.genreService.getAllGenres().subscribe(
       genres => this.genresList = genres,
       error => console.log(error)
-
     )
+  }
 
+  ngOnDestroy(){
+    if(this.gSub){
+      this.gSub.unsubscribe()
+    }
+    if(this.dSub){
+      this.dSub.unsubscribe()
+    }
   }
 
   onSumbit() {
 
     this.genreForm.disable()
-
     this.genreService.createGenre({ name: this.genreForm.value.name.trim() })
       .subscribe(
         genre => {
           this.genresList.unshift(genre)
-          console.log(genre);
-
         },
         error => console.log(error),
         () => {
@@ -55,18 +62,15 @@ export class GenrePageComponent implements OnInit {
   }
 
   deleteGenre(genre: Genre) {
-
     const desicion = window.confirm(`Delete ${genre.name} ??`)
-
     if (!desicion) {
       return
     }
-    this.genreService.deleteGenre(genre.id).subscribe(
+    this.dSub = this.genreService.deleteGenre(genre.id).subscribe(
       () => {
         this.genresList = this.genresList.filter(g => g.id !== genre.id)
       },
       error => console.log(error)
-      
     )
   }
 
