@@ -1,0 +1,54 @@
+<div *ngIf='author; else loader'>
+
+
+
+    <div class="card  mb-2">
+        <div class="card-header">
+            <h5>About author</h5>
+        </div>
+        <div class="text-center">
+
+            <div class="card-body">
+                <h1 class="card-title">{{author.lastName}} {{author.firstName}} {{author.middleName}}</h1>
+                <p class="card-text">Day of Birth: {{ author.dateOfBirth | date:"dd.MM.yyyy"}} </p>
+                <p class="card-text">Books in the database: <strong>{{author.bookList ? author.bookList.length : 0
+                        }}</strong></p>
+                <div class="text-right">
+                    <button [routerLink]="['/edit', author.id]" class="btn btn-warning">Edit</button>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h5>Books</h5>
+        </div>
+        <div
+        *ngIf="author.bookList; else empty"
+        class="row  text-center">
+            <div *ngFor="let book of author.bookList" class="col-sm-6 ">
+                <div class="card m-2">
+                    <div class="card-body">
+                        <h4 class="card-title text-primary">{{book.title}}</h4>
+                        <div class="card-text">Genre: <strong>{{book.genre}}</strong></div>
+                        <div class="card-text">Number of pages: <strong>{{book.pages}}</strong></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <ng-template #empty>
+            <div class="alert alert-dark text-center m-3">
+                No book
+            </div>
+        </ng-template>
+
+    </div>
+
+</div>
+
+<ng-template #loader>
+    <app-loader></app-loader>
+</ng-template>

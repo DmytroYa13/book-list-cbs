@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+  production: true,
+  fbUrl: 'https://bookslistcbs-default-rtdb.firebaseio.com'
 };

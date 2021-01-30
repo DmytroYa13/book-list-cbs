@@ -1,0 +1,72 @@
+<div class="position-custom mb-3">
+
+  <input #searchInput 
+  class="form-control mr-sm-2" 
+  type="search" 
+  placeholder="Type the title of the book..."
+  (blur)="closeListForResult()"
+    aria-label="Search">
+  <div class="position-custom-inside">
+    <div *ngIf='booksForResult' class="ul-container">
+      <ul  class="list-group">
+        <li *ngFor="let book of booksForResult"
+          class="list-group-item list-group-item-light d-flex justify-content-between align-items-center">{{book.title}}
+          <button type="button" [routerLink]="['/author',book.authorId]" class="btn btn-primary">Open author
+            page</button>
+        </li>
+        <li *ngIf='!isResult' class="list-group-item ">No result</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+
+
+
+<div *ngIf='authors; else loader '>
+  <table *ngIf='authors.length !==0; else empty' class="table table-hover">
+    <thead>
+      <tr>
+        <th style="width: 15%">#</th>
+        <th style="width: 35%">Author</th>
+        <th style="width: 15%">Books</th>
+        <th style="width: auto">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor='let author of authors; let idx = index'>
+        <th scope="row">{{idx+1}}</th>
+        <td>
+          {{author.lastName }}
+          {{author.firstName | firstLetterName}}
+          {{author.middleName | firstLetterName}}
+
+        </td>
+        <td>{{author.bookList ? author.bookList.length : "0"}}</td>
+        <td>
+          <span class="d-flex flex-wrap">
+            <button [routerLink]="['/author', author.id]" type="button" class="btn btn-custom btn-primary">Open</button>
+            <button [routerLink]="['/edit', author.id]" type="button" class="btn btn-custom btn-warning">Edit</button>
+            <button (click)="deleteAuthor(author)" type="button" class="btn btn-custom btn-danger">Delete</button>
+          </span>
+        </td>
+      </tr>
+
+
+    </tbody>
+  </table>
+
+  <ng-template #empty>
+    <div class="alert alert-dark text-center" role="alert">
+      No author !!
+    </div>
+  </ng-template>
+
+</div>
+
+<ng-template #loader>
+  <app-loader ></app-loader>
+</ng-template>
+
+

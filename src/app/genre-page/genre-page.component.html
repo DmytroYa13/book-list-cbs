@@ -1,0 +1,61 @@
+<h3>Add new genre</h3>
+
+<form [formGroup]='genreForm' (ngSubmit)="onSumbit()" class="min-height ">
+    <div class="input-group ">
+        <input formControlName='name' type="text" class="form-control " placeholder="New genre"
+            [class.is-invalid]="genreForm.get('name').invalid && genreForm.get('name').touched"
+            [class.is-valid]="genreForm.get('name').valid && genreForm.get('name').touched">
+
+        <div class="input-group-append">
+            <button class="btn btn-success btn-custom-input" type="submit"
+                [disabled]="genreForm.invalid || genreForm.disabled">Add</button>
+        </div>
+
+
+
+    </div>
+    <div *ngIf="genreForm.get('name').invalid && genreForm.get('name').touched">
+        <small class="red-text-invalid" *ngIf="genreForm.get('name').errors.required">Must be filled !!</small>
+        <small class="red-text-invalid"
+            *ngIf="genreForm.get('name').errors.noSpace && !genreForm.get('name').errors.required">You can`t use
+            only space!!</small>
+    </div>
+
+
+
+
+</form>
+
+<div *ngIf='genresList; else loader '>
+
+    <h3>List of genres</h3>
+    <table *ngIf='genresList.length !==0; else empty' class="table table-hover">
+        <thead>
+            <tr>
+                <th style="width: 85%">Genre</th>
+                <th style="width: 15%">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let genre of genresList">
+                <td>{{genre.name}}</td>
+                <td>
+                    <button type="button" class="btn btn-danger" (click)="deleteGenre(genre)">Delete</button>
+                </td>
+            </tr>
+
+
+        </tbody>
+    </table>
+    <ng-template #empty>
+        <div class="alert alert-dark text-center">
+            No genre
+        </div>
+    </ng-template>
+
+
+</div>
+
+<ng-template #loader>
+    <app-loader></app-loader>
+</ng-template>

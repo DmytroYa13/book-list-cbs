@@ -1,0 +1,12 @@
+.card-body{
+    padding: 0;
+}
+
+.card{
+    padding: 5px;
+}
+
+.width-custom{
+    min-width: 250px;
+}
+

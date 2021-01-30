@@ -1,0 +1,17 @@
+.ul-container{
+    box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.2);
+    max-height: 245px;
+    overflow-y: auto;
+}
+
+
+.position-custom{
+    position: relative;
+    z-index: 1000;
+}
+
+.position-custom-inside{
+  position: absolute;
+  width: 100%;
+}
+

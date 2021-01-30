@@ -1,0 +1,165 @@
+<h3>Add new author</h3>
+
+<form [formGroup]='form' (ngSubmit)='onSubmit()'>
+    <div class="form-group row">
+        <label class="col-sm-3 col-form-label" for="firstName">First name<span class="reqiured-input">*</span></label>
+
+        <div class="col-sm-9 min-height">
+            <input type="text" class="form-control" id="firstName" formControlName="firstName" 
+
+            [ngClass]="{'is-invalid':form.get('firstName').invalid && form.get('firstName').touched,
+            'is-valid': form.get('firstName').valid && form.get('firstName').touched}"
+            >
+            <div *ngIf="form.get('firstName').invalid &&form.get('firstName').touched">
+                <small class="red-text-invalid" *ngIf="form.get('firstName').errors.required">Must be filled !!</small>
+                <small class="red-text-invalid"
+                    *ngIf="form.get('firstName').errors.noSpace && !form.get('firstName').errors.required">You can`t use
+                    only space!!</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group row ">
+        <label class="col-sm-3 col-form-label" for="middleName">Middle name</label>
+
+        <div class="col-sm-9 min-height">
+            <input type="text" class="form-control" id="middleName" formControlName="middleName"
+                [class.is-valid]="form.get('middleName').valid && form.get('middleName').touched">
+        </div>
+    </div>
+
+
+
+
+
+    <div class="form-group row ">
+        <label class="col-sm-3 col-form-label" for="lastName">Last name<span class="reqiured-input">*</span></label>
+        <div class="col-sm-9 min-height">
+            <input type="text" class="form-control" id="lastName" formControlName="lastName"
+
+
+                
+                [ngClass]="{'is-invalid':form.get('lastName').invalid && form.get('lastName').touched,
+            'is-valid': form.get('lastName').valid && form.get('lastName').touched}"
+                
+                >
+            <div *ngIf="form.get('lastName').invalid &&form.get('lastName').touched">
+                <small class="red-text-invalid" *ngIf="form.get('lastName').errors.required">Must be filled !!</small>
+                <small class="red-text-invalid"
+                    *ngIf="form.get('lastName').errors.noSpace && !form.get('lastName').errors.required">You can`t use
+                    only space!!</small>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="form-group row ">
+        <label class="col-sm-3 col-form-label" for="dateOfBirth">Date of birth<span
+                class="reqiured-input">*</span></label>
+
+        <div class="col-sm-9 min-height">
+            <input type="date" class="form-control" id="dateOfBirth" formControlName="dateOfBirth"
+            
+
+                [ngClass]="{'is-invalid':form.get('dateOfBirth').invalid && form.get('dateOfBirth').touched,
+                'is-valid': form.get('dateOfBirth').valid && form.get('dateOfBirth').touched}"
+
+                >
+            <div *ngIf="form.get('dateOfBirth').invalid &&form.get('dateOfBirth').touched">
+                    <small class="red-text-invalid">Must be filled !!</small>
+            </div>
+
+        </div>
+    </div>
+
+    <button class="btn btn-block btn-primary" type="submit"
+        [disabled]='form.disabled || form.invalid || isAddBookVisible'>{{isNew ? 'Create author': 'Save All changes'}}</button>
+
+</form>
+
+<hr>
+
+<button (click)="isAddBookVisible = !isAddBookVisible" *ngIf='!isAddBookVisible' class="btn btn-primary">Add
+    book</button>
+
+<div *ngIf='isAddBookVisible'>
+    <form [formGroup]='addBookForm' (ngSubmit)="OnAddSubmit()" class="form d-flex align-items-center p-1 flex-wrap justify-content-between">
+
+        <span class="m-1">
+            <input formControlName="title"
+                [class.is-invalid]="addBookForm.get('title').invalid && addBookForm.get('title').touched"
+                [class.is-valid]="addBookForm.get('title').valid && addBookForm.get('title').touched"
+                class="form-control width-custom" type="text" placeholder="Title">
+        </span>
+
+        <span class="m-1">
+
+            <select class="custom-select width-custom " formControlName="genre"
+                [class.is-invalid]="addBookForm.get('genre').invalid && addBookForm.get('genre').touched"
+                [class.is-valid]="addBookForm.get('genre').valid && addBookForm.get('genre').touched">
+                <option value="" disabled selected>Genre</option>
+                <option *ngFor="let genre of genres" [value]="genre.name">{{genre.name}}</option>
+            </select>
+
+        </span>
+
+        <span class="m-1 mr-1  width-custom">
+            <input class="form-control " type="text" formControlName="pages" placeholder="Pages"
+                [class.is-invalid]="addBookForm.get('pages').invalid && addBookForm.get('pages').touched"
+                [class.is-valid]="addBookForm.get('pages').valid && addBookForm.get('pages').touched">
+        </span>
+        <span>
+            <button class="btn btn-success btn-custom" type="submit" [disabled]='addBookForm.invalid'>OK</button>
+            <button (click)="isAddBookVisible = !isAddBookVisible" class="btn btn-secondary btn-custom">Cancel</button>
+        </span>
+
+    </form>
+
+
+    <div *ngIf="addBookForm.get('title').invalid && addBookForm.get('title').touched">
+        <small class="red-text-invalid" *ngIf="addBookForm.get('title').errors.required">Title must be filled !!</small>
+
+        <small class="red-text-invalid"
+            *ngIf="addBookForm.get('title').errors.noSpace && !addBookForm.get('title').errors.required">You can`t use
+            only spaces in title !!</small>
+    </div>
+
+    <div *ngIf="addBookForm.get('genre').invalid && addBookForm.get('genre').touched">
+        <small class="red-text-invalid" *ngIf="addBookForm.get('genre').errors.required">Genre must be selected
+            !!</small>
+    </div>
+
+    <div *ngIf="addBookForm.get('pages').invalid && addBookForm.get('pages').touched">
+        <small class="red-text-invalid" *ngIf="addBookForm.get('pages').errors.required">Pages must be filled !!</small>
+
+        <small class="red-text-invalid"
+            *ngIf="addBookForm.get('pages').errors.pattern && !addBookForm.get('pages').errors.required">
+            Use only number in Pages</small>
+    </div>
+    <div>
+        <small> Did not find suitable genre ?? Click <a routerLink='/genre'>here to ADD</a></small>
+    </div>
+
+
+
+</div>
+
+
+<hr>
+
+
+<!-- <app-list *ngIf="booksList.length !==0; else isNew ? null : loader" [books]="booksList" [isNew]="isNew" [genres]="genres"></app-list> -->
+<app-list *ngIf='booksList.length!==0'  [books]="booksList" [isNew]="isNew" [genres]="genres"></app-list>
+
+
+<!-- <ng-template  #loader> -->
+    <app-loader *ngIf='!author && !isNew;else empty' ></app-loader>
+<!-- </ng-template> -->
+
+
+
+<ng-template #empty>
+    <div *ngIf='booksList.length==0' class="alert alert-dark text-center m-3">
+        No book
+    </div>
+</ng-template>

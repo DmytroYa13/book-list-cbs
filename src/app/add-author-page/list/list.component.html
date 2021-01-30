@@ -1,0 +1,102 @@
+<h3>List</h3>
+
+
+
+
+
+<div class="card-body">
+    <div *ngFor=" let book of booksList">
+
+        <div class="card ">
+            <ng-template [ngTemplateOutlet]="getTemplate(book)" [ngTemplateOutletContext]="{ $implicit: book }">
+            </ng-template>
+        </div>
+
+        <hr>
+
+        <ng-template #bookCard let-book>
+            <div class="card-body">
+                <div class="d-flex align-items-center  justify-content-between">
+
+                    <span class="d-flex flex-wrap align-items-center">
+                        <h5 class="d-inline width-custom"> "{{book.title}}"</h5>
+                        <span class="width-custom"> Genre: <strong>{{ book.genre}}</strong></span>
+                        <span> Pages: <strong>{{ book.pages}}</strong></span>
+                    </span>
+                    <span *ngIf="!isNew" class="d-flex  flex-wrap align-items-center justify-content-end">
+                        <button class="btn btn-warning btn-custom " (click)="edit(book)">Edit</button>
+                        <button class="btn btn-danger btn-custom" (click)="deleteBook(book)">Delete</button>
+                    </span>
+                </div>
+            </div>
+        </ng-template>
+
+        <ng-template #bookEdit>
+
+
+
+            <form [formGroup]='selectedForm' (ngSubmit)="save()"
+                class="form d-flex align-items-center  flex-wrap justify-content-between card-form">
+                <span class="m-1">
+                    <input formControlName="selectedTitle"
+                        [class.is-invalid]="selectedForm.get('selectedTitle').invalid && selectedForm.get('selectedTitle').touched"
+                        [class.is-valid]="selectedForm.get('selectedTitle').valid && selectedForm.get('selectedTitle').touched"
+                        class="form-control width-custom" type="text" placeholder="Title">
+                </span>
+
+                <span class="m-1">
+
+                    <select class="custom-select width-custom " formControlName="selectedGenre"
+                        [class.is-invalid]="selectedForm.get('selectedGenre').invalid && selectedForm.get('selectedGenre').touched"
+                        [class.is-valid]="selectedForm.get('selectedGenre').valid && selectedForm.get('selectedGenre').touched">
+                        <option value="" disabled selected>Genre</option>
+                        <option *ngFor="let genre of genresList" [value]="genre.name">{{genre.name}}</option>
+                    </select>
+
+                </span>
+
+                <span class="m-1 mr-1">
+                    <input class="form-control width-custom" type="text" formControlName="selectedPages"
+                        placeholder="Pages"
+                        [class.is-invalid]="selectedForm.get('selectedPages').invalid && selectedForm.get('selectedPages').touched"
+                        [class.is-valid]="selectedForm.get('selectedPages').valid && selectedForm.get('selectedPages').touched">
+                </span>
+                <span>
+                    <button class="btn btn-success btn-custom" type="submit"
+                        [disabled]='selectedForm.invalid'>OK</button>
+                    <button (click)="reset()" type="button" class="btn btn-secondary btn-custom ">Cancel</button>
+                </span>
+
+            </form>
+
+
+            <div *ngIf="selectedForm.get('selectedTitle').invalid && selectedForm.get('selectedTitle').touched">
+                <small class="red-text-invalid" *ngIf="selectedForm.get('selectedTitle').errors.required">Title must be
+                    filled !!</small>
+
+                <small class="red-text-invalid"
+                    *ngIf="selectedForm.get('selectedTitle').errors.noSpace && !selectedForm.get('selectedTitle').errors.required">You
+                    can`t use
+                    only spaces in title !!</small>
+            </div>
+
+            <div *ngIf="selectedForm.get('selectedGenre').invalid && selectedForm.get('selectedGenre').touched">
+                <small class="red-text-invalid" *ngIf="selectedForm.get('selectedGenre').errors.required">Genre must be
+                    selected
+                    !!</small>
+            </div>
+
+            <div *ngIf="selectedForm.get('selectedPages').invalid && selectedForm.get('selectedPages').touched">
+                <small class="red-text-invalid" *ngIf="selectedForm.get('selectedPages').errors.required">Pages must be
+                    filled !!</small>
+
+                <small class="red-text-invalid"
+                    *ngIf="selectedForm.get('selectedPages').errors.pattern && !selectedForm.get('selectedPages').errors.required">
+                    Use only number in Pages</small>
+            </div>
+
+        </ng-template>
+    </div>
+</div>
+
+
